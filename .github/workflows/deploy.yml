@@ -23,3 +23,10 @@ jobs:
       
       - name: Run tests
         run: npm run test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: first_job
+    steps:
+      - name: Deploy
+        run: echo "Deploy ..."
