@@ -4,7 +4,12 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [18, 20]
 
     steps:
       - name: Print variable
@@ -16,7 +21,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: ${{ matrix.node }}
       
       - name: Install dependencies
         run: npm install
@@ -28,6 +33,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
+        if: ${{ matrix.os == "ubuntu-latest" && matrix.node == 18 }}
         uses: actions/upload-pages-artifact@v3 
         with:
           path: public/
